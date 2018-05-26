@@ -1,0 +1,6 @@
+---
+- name: add java apt repo
+  apt_repository: repo=ppa:webupd8team/java update_cache=yes
+
+- name: install oracle java
+  apt: name=oracle-java8-installer state=present
