@@ -1,0 +1,18 @@
+---
+- name: install nginx
+  apt: name=nginx state=present
+  notify: reload systemd
+
+- name: remove default nginx site
+  file: dest=/etc/nginx/sites-enabled/default state=absent
+
+- name: install nginx force-https site
+  copy: src=etc_nginx_sites-available_force-https dest=/etc/nginx/sites-available/force-https mode=0644 owner=root group=root
+  notify: reload nginx
+
+- name: enable force-https site
+  file: src=/etc/nginx/sites-available/force-https dest=/etc/nginx/sites-enabled/force-https state=link
+  notify: reload nginx
+
+- name: enable nginx
+  systemd: name=nginx enabled=yes state=started
