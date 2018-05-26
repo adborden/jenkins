@@ -2,5 +2,11 @@
 - name: add java apt repo
   apt_repository: repo=ppa:webupd8team/java update_cache=yes
 
+- name: accept the Oracle v1.1 license
+  shell: echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections
+
+- name: mark Oracle v1.1 license as seen
+  shell: echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections
+
 - name: install oracle java
   apt: name=oracle-java8-installer state=present

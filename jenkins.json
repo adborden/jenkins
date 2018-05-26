@@ -24,6 +24,10 @@
   }],
   "provisioners": [
     {
+      "type": "shell",
+      "inline": ["sudo apt-get install -y python"]
+    },
+    {
       "type": "ansible",
       "playbook_file": "ansible/jenkins.yml",
       "groups": ["jenkins"]
