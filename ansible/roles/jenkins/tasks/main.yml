@@ -10,3 +10,6 @@
 
 - name: install oracle java
   apt: name=oracle-java8-installer state=present
+
+- name: install docker
+  apt: name=docker.io state=present
