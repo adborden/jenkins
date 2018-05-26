@@ -1,2 +1,4 @@
+*.retry
 .secrets
 secrets
+.vagrant
