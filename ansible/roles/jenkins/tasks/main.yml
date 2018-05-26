@@ -1,4 +1,7 @@
 ---
+- name: install docker
+  apt: name=docker.io state=present
+
 - name: add java apt repo
   apt_repository: repo=ppa:webupd8team/java update_cache=yes
 
@@ -11,5 +14,18 @@
 - name: install oracle java
   apt: name=oracle-java8-installer state=present
 
-- name: install docker
-  apt: name=docker.io state=present
+- name: add jenkins repo key
+  apt_key:
+    url: "https://pkg.jenkins.io/debian/jenkins.io.key"
+    state: present
+
+- name: add jenkins repo key
+  apt_repository:
+    repo: deb http://pkg.jenkins.io/debian-stable binary/
+    state: present
+
+- name: install jenkins
+  apt: name=jenkins state=present
+
+- name: enable jenkins
+  systemd: name=jenkins enabled=yes state=started
