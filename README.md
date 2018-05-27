@@ -24,6 +24,10 @@ Run the build.
 
     $ make build
 
+Deploy the infrastructure.
+
+    $ terraform apply terraform
+
 
 ## Tests
 
