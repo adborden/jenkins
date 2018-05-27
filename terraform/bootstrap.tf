@@ -5,4 +5,8 @@ resource "aws_s3_bucket" "terraform" {
   versioning {
     enabled = true
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
