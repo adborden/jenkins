@@ -33,15 +33,50 @@ resource "aws_security_group" "jenkins" {
   }
 }
 
-resource "aws_instance" "jenkins" {
-  count = 2
-  ami           = "${data.aws_ami.jenkins.id}"
-  instance_type = "t2.micro"
-  subnet_id     = "${element(aws_subnet.jenkins.*.id, count.index)}"
-  vpc_security_group_ids = ["${aws_vpc.jenkins.default_security_group_id}", "${aws_security_group.jenkins.id}"]
+resource "aws_placement_group" "jenkins-web" {
+  name     = "jenkins-web"
+  strategy = "spread"
+}
 
-  tags {
-    Name = "jenkins"
+resource "aws_launch_configuration" "jenkins-web" {
+  name_prefix = "jenkins-web-"
+  image_id = "${data.aws_ami.jenkins.id}"
+  instance_type = "t2.micro"
+  security_groups = ["${aws_vpc.jenkins.default_security_group_id}", "${aws_security_group.jenkins.id}"]
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
+resource "aws_autoscaling_group" "jenkins" {
+  name                      = "jenkins-web-2"
+  max_size                  = 4
+  min_size                  = 2
+  health_check_grace_period = 300
+  health_check_type         = "ELB"
+  desired_capacity          = 2
+  placement_group           = "${aws_placement_group.jenkins-web.id}"
+  launch_configuration      = "${aws_launch_configuration.jenkins-web.name}"
+  vpc_zone_identifier       = ["${aws_subnet.jenkins.*.id}"]
+  target_group_arns         = ["${aws_lb_target_group.jenkins-http.arn}", "${aws_lb_target_group.jenkins-https.arn}"]
+
+  # force delete to allow asg to be removed before instances are destroyed.
+  # Avoids some thrashing of instances being created/destroyed unnecessarily.
+  # Instances part of the asg will be destoryed before terraform quits.
+  force_delete              = true
+
+  tag {
+    key                 = "Name"
+    value               = "jenkins-web"
+    propagate_at_launch = true
+  }
+
+  timeouts {
+    delete = "15m"
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
