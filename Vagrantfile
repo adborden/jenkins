@@ -84,7 +84,7 @@ Vagrant.configure("2") do |config|
     web.vm.provision 'ansible' do |ansible|
       ansible.playbook = 'ansible/jenkins.yml'
       ansible.groups = {
-        'jenkins' => ['jenkins-web']
+        'jenkins-web' => ['jenkins-web']
       }
     end
   end
@@ -93,7 +93,7 @@ Vagrant.configure("2") do |config|
     worker.vm.provision 'ansible' do |ansible|
       ansible.playbook = 'ansible/jenkins.yml'
       ansible.groups = {
-        'jenkins' => ['jenkins-worker']
+        'jenkins-worker' => ['jenkins-worker']
       }
     end
   end
