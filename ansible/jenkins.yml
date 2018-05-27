@@ -1,7 +1,13 @@
 ---
-- hosts: jenkins
+- hosts: jenkins-web
   become: yes
   roles:
     - common
-    - jenkins
+    - jenkins-web
     - nginx
+
+- hosts: jenkins-worker
+  become: yes
+  roles:
+    - common
+    - jenkins-worker
