@@ -27,3 +27,6 @@ apply: plan.tfplan
 
 build:
 	packer build $(VARIABLES) *.json
+
+
+.PHONY = apply build check init plan test

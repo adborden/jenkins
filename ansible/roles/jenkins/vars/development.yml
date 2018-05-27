@@ -1,2 +1,2 @@
 ---
-aws_efs_dns_name: fs-eb01e7f2.efs.us-west-1.amazonaws.com # Run `terraform output` for the updated value
+aws_efs_dns_name: fs-0817f111.efs.us-west-1.amazonaws.com # Run `terraform output` for the updated value
