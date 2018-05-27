@@ -2,4 +2,7 @@
 *.retry
 .secrets
 secrets
+.terraform
+*.tfstate
+*.tfstate.backup
 .vagrant
