@@ -5,10 +5,10 @@ check:
 	ansible-playbook --syntax-check ansible/*.yml
 
 init:
-	terraform plan -var web_instances_desired=1 -var web_instances_max=1 -out=plan.tfplan terraform 
+	terraform plan -var web_instances_desired=1 -var web_instances_max=1 -out=plan.tfplan terraform
 
 plan:
-	terraform plan -out=plan.tfplan terraform 
+	terraform plan -out=plan.tfplan terraform
 	read -p "Continue? " continue
 	if [[ "\${continue}" !== "yes" ]]; then
 	  echo Anything other than \"yes\" aborts. >&2
@@ -26,6 +26,6 @@ test:
 	vagrant provision
 
 build:
-	packer build *.json
+	packer build -var ansible_group=jenkins packer/jenkins.json
 
 .PHONY = apply build check init plan test

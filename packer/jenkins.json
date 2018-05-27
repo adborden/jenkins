@@ -20,7 +20,7 @@
     },
     "instance_type": "t2.micro",
     "ssh_username": "ubuntu",
-    "ami_name": "jenkins {{timestamp}}"
+    "ami_name": "{{user `ansible_group`}}-{{isotime \"2006-01-02-150405\"}}"
   }],
   "provisioners": [
     {
@@ -30,7 +30,7 @@
     {
       "type": "ansible",
       "playbook_file": "ansible/jenkins.yml",
-      "groups": ["jenkins"]
+      "groups": ["{{user `ansible_group`}}"]
     }
   ]
 }
