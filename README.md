@@ -55,3 +55,17 @@ need to provide a token to the UI. The token is available in the jenkins logs at
 `/var/log/jenkins/jenkins.log`. Once that's provided, follow the on-screen
 instructions. Initially, you'll want to boot with a single node, otherwise there
 might be a race-condition with both nodes writing to the shared storage.
+
+Here are the general steps to take:
+
+1. Start a single web node with a public IP and port 22 available in the
+   security group.
+1. `terraform apply terraform`
+
+
+## Quirks
+
+If the jenkins uid/gid changes, the data on the EFS will need to be updated.
+Should this be automated as part of the machine startup?
+
+    $ sudo chown -R jenkins:jenkins /mnt/jenkins

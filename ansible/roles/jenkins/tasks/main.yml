@@ -16,8 +16,11 @@
 - name: enable docker
   systemd: name=docker enabled=yes state=started
 
+- name: install jenkins group
+  group: name=jenkins gid={{ jenkins_gid }} system=yes state=present
+
 - name: install jenkins user
-  user: name=jenkins groups=docker home="{{ jenkins_home_dir }}" system=yes state=present
+  user: name=jenkins uid={{ jenkins_uid }} groups=docker home="{{ jenkins_home_dir }}" system=yes state=present
 
 - name: create jenkins home
   file: dest="{{ jenkins_home_dir }}" mode=0550 owner=jenkins group=jenkins state=directory
