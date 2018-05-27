@@ -1,6 +1,6 @@
 
 check:
-	packer validate *.json
+	packer validate packer/*.json
 	terraform validate terraform
 	ansible-playbook --syntax-check ansible/*.yml
 

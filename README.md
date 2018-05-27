@@ -36,9 +36,13 @@ We're using Vagrant for testing/development.
 
     $ make test
 
+Or work with a single instance
+
+    $ vagrant up <group-name>
+
 You can ssh into the instance to debug.
 
-    $ vagrant ssh
+    $ vagrant ssh <group-name>
 
 When you're done, or if you want to start from scratch, destroy the instance.
 
