@@ -1,6 +1,26 @@
 ---
+- name: install nfs tools for EFS
+  apt: name=nfs-common state=present
+
+- name: create jenkins home EFS mountpoint
+  mount:
+    path: "{{ jenkins_home_dir }}"
+    src: "{{ aws_efs_dns_name }}:/"
+    fstype: nfs4
+    opts: rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport
+    state: present
+
 - name: install docker
   apt: name=docker.io state=present
+
+- name: enable docker
+  systemd: name=docker enabled=yes state=started
+
+- name: install jenkins user
+  user: name=jenkins groups=docker home="{{ jenkins_home_dir }}" system=yes state=present
+
+- name: create jenkins home
+  file: dest="{{ jenkins_home_dir }}" mode=0550 owner=jenkins group=jenkins state=directory
 
 - name: add java apt repo
   apt_repository: repo=ppa:webupd8team/java update_cache=yes
@@ -26,6 +46,12 @@
 
 - name: install jenkins
   apt: name=jenkins state=present
+
+- name: set JENKINS_HOME
+  lineinfile:
+    path: /etc/default/jenkins
+    regexp: "^JENKINS_HOME="
+    line: JENKINS_HOME={{ jenkins_home_dir }}
 
 - name: enable jenkins
   systemd: name=jenkins enabled=yes state=started

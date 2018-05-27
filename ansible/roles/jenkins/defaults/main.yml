@@ -1,0 +1,3 @@
+---
+aws_efs_dns_name: unknown.internal # Replace this
+jenkins_home_dir: /mnt/jenkins
