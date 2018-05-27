@@ -3,6 +3,7 @@
 .secrets
 secrets
 .terraform
+*.tfplan
 *.tfstate
 *.tfstate.backup
 .vagrant

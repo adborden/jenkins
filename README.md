@@ -26,6 +26,7 @@ Run the build.
 
 Deploy the infrastructure.
 
+    $ terraform plan terraform
     $ terraform apply terraform
 
 
@@ -50,6 +51,25 @@ There is a bit of a cyclical dependency between Terraform and Ansible. Ansible
 needs the EFS DNS name to setup the mount point. This doesn't exist until
 Terraform creates the EFS. Once Terraform creates it, set it as a variable for
 Ansible.
+
+You can create the EFS first.
+
+    $ terraform plan terraform -target aws_efs_file_system.jenkins
+    $ terraform apply terraform -target aws_efs_file_system.jenkins
+    ...
+    Outputs:
+
+    jenkins_efs_dns_name = fs-0817f111.efs.us-west-1.amazonaws.com
+
+Then update the variable in `ansible/group_vars/jenkins/vars.yml` and build
+a new AMI.
+
+    $ make build
+
+Now we can build the whole thing.
+
+    $ terraform plan terraform
+    $ terraform apply terraform
 
 
 ## Initial Jenkins state creation
