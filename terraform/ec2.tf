@@ -64,6 +64,7 @@ resource "aws_launch_configuration" "jenkins-web" {
   image_id = "${data.aws_ami.jenkins-web.id}"
   instance_type = "t2.micro"
   security_groups = ["${aws_vpc.jenkins.default_security_group_id}", "${aws_security_group.jenkins.id}"]
+  associate_public_ip_address = true
 
   lifecycle {
     create_before_destroy = true
@@ -107,6 +108,7 @@ resource "aws_launch_configuration" "jenkins-worker" {
   image_id = "${data.aws_ami.jenkins-worker.id}"
   instance_type = "t2.micro"
   security_groups = ["${aws_vpc.jenkins.default_security_group_id}"]
+  associate_public_ip_address = true
 
   lifecycle {
     create_before_destroy = true
