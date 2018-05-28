@@ -1,0 +1,5 @@
+---
+- name: copy jenkins public ssh key
+  authorized_key:
+    key: "{{ lookup('file', secrets_dir + '/jenkins_ssh.pub') }}"
+    user: jenkins

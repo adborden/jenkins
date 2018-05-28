@@ -9,12 +9,6 @@ init:
 
 plan:
 	terraform plan -out=plan.tfplan terraform
-	read -p "Continue? " continue
-	if [[ "\${continue}" !== "yes" ]]; then
-	  echo Anything other than \"yes\" aborts. >&2
-	  rm plan.tfplan
-	  exit 1
-	fi
 
 apply: plan.tfplan
 	terraform apply plan.tfplan
@@ -26,6 +20,7 @@ test:
 	vagrant provision
 
 build:
-	packer build -var ansible_group=jenkins packer/jenkins.json
+	packer build -var ansible_group=jenkins-web packer/jenkins.json
+	packer build -var ansible_group=jenkins-worker packer/jenkins.json
 
 .PHONY = apply build check init plan test
