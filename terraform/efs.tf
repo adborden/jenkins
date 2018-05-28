@@ -4,6 +4,10 @@ resource "aws_efs_file_system" "jenkins" {
   tags {
     Name = "jenkins-efs"
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_efs_mount_target" "jenkins" {

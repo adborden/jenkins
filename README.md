@@ -93,7 +93,19 @@ Here are the general steps to take:
 
 ## Quirks
 
+
+### EFS uid/gids
+
 If the jenkins uid/gid changes, the data on the EFS will need to be updated.
 Should this be automated as part of the machine startup?
 
     $ sudo chown -R jenkins:jenkins /mnt/jenkins
+
+
+### ELB health check
+
+Out of the box, Jenkins fails the ELB health check. The ELB expects a `200` from
+`/`, but Jenkins is configured to `403` and redirect to login. Not sure if there
+is a better health check endpoint for Jenkins. I just configured read-only
+access for anonymous users, since the intention is for jobs to be public by
+default.
