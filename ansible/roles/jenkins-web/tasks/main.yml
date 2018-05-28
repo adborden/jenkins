@@ -8,6 +8,11 @@
   file: dest="{{ jenkins_home_dir }}" mode=0550 owner=jenkins group=jenkins state=directory
 
 - name: add jenkins repo key
+  apt_key:
+    url: "https://pkg.jenkins.io/debian/jenkins.io.key"
+    state: present
+
+- name: add jenkins repo
   apt_repository:
     repo: deb http://pkg.jenkins.io/debian-stable binary/
     state: present
