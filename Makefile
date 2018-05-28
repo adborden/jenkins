@@ -26,7 +26,7 @@ apply: plan.tfplan
 	rm plan.tfplan
 
 build:
-	packer build $(VARIABLES) *.json
-
+	packer build $(VARIABLES) -var ansible_group=jenkins-web packer/jenkins.json
+	packer build $(VARIABLES) -var ansible_group=jenkins-worker packer/jenkins.json
 
 .PHONY = apply build check init plan test
