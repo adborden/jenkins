@@ -29,3 +29,11 @@
 
 - name: enable jenkins
   systemd: name=jenkins enabled=yes state=started
+
+- name: copy jenkins ssh key
+  copy:
+    src: "{{ lookup('file', jenkins_ssh_key_file) }}"
+    dest: /home/jenkins/.ssh/id_rsa
+    owner: jenkins
+    group: jenkins
+    mode: 0600

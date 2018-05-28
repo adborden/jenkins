@@ -1,3 +1,4 @@
 ---
 aws_efs_dns_name: unknown.internal # Replace this
 jenkins_home_dir: /mnt/jenkins
+jenkins_ssh_key_file: "{{ secrets_dir }}/jenkins_ssh"
