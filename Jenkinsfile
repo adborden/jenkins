@@ -38,5 +38,36 @@ pipeline {
         }
       }
     }
+    stage('build') {
+      steps {
+        sh 'make build'
+      }
+    }
+    stage('plan') {
+      environment {
+        AWS_SECRET_ACCESS_KEY=credentials('aws-secret-access-key')
+        AWS_ACCESS_KEY_ID=credentials('aws-access-key-id')
+      }
+      steps {
+        sh 'make plan'
+      }
+    }
+    stage('deploy') {
+      when {
+        branch 'master'
+      }
+      environment {
+        AWS_SECRET_ACCESS_KEY=credentials('aws-secret-access-key')
+        AWS_ACCESS_KEY_ID=credentials('aws-access-key-id')
+      }
+      input {
+        message "Would you like to apply this plan?"
+        ok "Yes, I have reviewd the plan."
+        submitter "adborden"
+      }
+      steps {
+        sh 'make apply'
+      }
+    }
   }
 }
