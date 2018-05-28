@@ -35,9 +35,12 @@
 - name: enable jenkins
   systemd: name=jenkins enabled=yes state=started
 
+- name: create jenkins ssh directory
+  file: dest=/home/jenkins/.ssh owner=jenkins group=jenkins mode=0750 state=directory
+
 - name: copy jenkins ssh key
   copy:
-    src: "{{ lookup('file', jenkins_ssh_key_file) }}"
+    src: "{{ jenkins_ssh_key_file }}"
     dest: /home/jenkins/.ssh/id_rsa
     owner: jenkins
     group: jenkins
