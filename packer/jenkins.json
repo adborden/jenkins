@@ -29,8 +29,7 @@
     },
     {
       "type": "ansible",
-      "playbook_file": "ansible/jenkins.yml",
-      "groups": ["{{user `ansible_group`}}"]
+      "playbook_file": "ansible/{{user `ansible_group`}}.yml"
     }
   ]
 }

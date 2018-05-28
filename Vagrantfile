@@ -82,19 +82,13 @@ Vagrant.configure("2") do |config|
     web.vm.network "forwarded_port", guest: 8080, host: 8080, host_ip: "127.0.0.1"
 
     web.vm.provision 'ansible' do |ansible|
-      ansible.playbook = 'ansible/jenkins.yml'
-      ansible.groups = {
-        'jenkins-web' => ['jenkins-web']
-      }
+      ansible.playbook = 'ansible/jenkins-web.yml'
     end
   end
 
   config.vm.define 'jenkins-worker' do |worker|
     worker.vm.provision 'ansible' do |ansible|
-      ansible.playbook = 'ansible/jenkins.yml'
-      ansible.groups = {
-        'jenkins-worker' => ['jenkins-worker']
-      }
+      ansible.playbook = 'ansible/jenkins-worker.yml'
     end
   end
 
