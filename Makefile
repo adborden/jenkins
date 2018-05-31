@@ -12,5 +12,12 @@ test:
 	vagrant up --no-provision
 	vagrant provision
 
+plan:
+	terraform plan -out=plan.tfplan terraform
+
+apply: plan.tfplan
+	terraform apply plan.tfplan
+	rm plan.tfplan
+
 build:
 	packer build *.json
