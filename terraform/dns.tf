@@ -4,7 +4,7 @@ data "aws_route53_zone" "aws" {
 
 resource "aws_route53_record" "www" {
   zone_id = "${data.aws_route53_zone.aws.zone_id}"
-  name    = "jenkins"
+  name    = "${var.domain_prefix}"
   type    = "CNAME"
   ttl     = "300"
   records = ["${aws_lb.jenkins.dns_name}"]

@@ -15,7 +15,7 @@ pipeline {
     stage('build') {
       when { branch 'master'; branch 'develop' }
       steps {
-        sh 'make build'
+        sh 'make BRANCH_NAME=$BRANCH_NAME build'
       }
     }
     stage('plan') {
@@ -28,7 +28,7 @@ pipeline {
               sh 'terraform workspace select default terraform'
           }
         }
-        sh 'make plan'
+        sh 'make BRANCH_NAME=$BRANCH_NAME plan'
       }
     }
     stage('apply') {
