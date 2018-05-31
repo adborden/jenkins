@@ -3,6 +3,7 @@ resource "aws_efs_file_system" "jenkins" {
 
   tags {
     Name = "jenkins-efs"
+    env  = "${var.env}"
   }
 }
 

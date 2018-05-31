@@ -33,6 +33,7 @@
     },
     {
       "type": "ansible",
+      "extra_arguments": ["--extra-vars", "env={{user `env`}}"],
       "playbook_file": "ansible/jenkins.yml",
       "groups": ["jenkins"]
     }

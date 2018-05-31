@@ -1,4 +1,12 @@
 ---
+- name: include variables for production
+  include_vars: production.yml
+  when: env == 'production'
+
+- name: include variables for development
+  include_vars: development.yml
+  when: env == 'development'
+
 - name: install nfs tools for EFS
   apt: name=nfs-common state=present
 
