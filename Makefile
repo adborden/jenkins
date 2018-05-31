@@ -1,3 +1,8 @@
+VARIABLES =
+
+ifeq ($(BRANCH_NAME), master)
+  VARIABLES += -var env=production
+endif
 
 check:
 	packer validate *.json
@@ -13,11 +18,11 @@ test:
 	vagrant provision
 
 plan:
-	terraform plan -out=plan.tfplan terraform
+	terraform plan $(VARIABLES) -out=plan.tfplan terraform
 
 apply: plan.tfplan
 	terraform apply plan.tfplan
 	rm plan.tfplan
 
 build:
-	packer build *.json
+	packer build $(VARIABLES) *.json

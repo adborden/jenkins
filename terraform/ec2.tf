@@ -11,6 +11,11 @@ data "aws_ami" "jenkins" {
     values = ["hvm"]
   }
 
+  filter {
+    name   = "tag:env"
+    values = ["$var.env"]
+  }
+
   owners = ["self"]
 }
 

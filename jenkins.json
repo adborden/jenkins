@@ -2,7 +2,8 @@
   "description": "Jenkins ready image for running docker-based pipelines.",
   "variables": {
     "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
-    "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}"
+    "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+    "env": "development"
   },
   "builders": [{
     "type": "amazon-ebs",
@@ -20,7 +21,10 @@
     },
     "instance_type": "t2.micro",
     "ssh_username": "ubuntu",
-    "ami_name": "jenkins {{timestamp}}"
+    "ami_name": "jenkins {{timestamp}}",
+    "tags": {
+      "env": "{{user `env`}}"
+    }
   }],
   "provisioners": [
     {
