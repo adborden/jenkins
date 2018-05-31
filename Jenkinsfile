@@ -13,13 +13,13 @@ pipeline {
       }
     }
     stage('build') {
-      when { branch 'master'; branch 'develop' }
+      when { anyOf { branch 'master'; branch 'develop' } }
       steps {
         sh 'make BRANCH_NAME=$BRANCH_NAME build'
       }
     }
     stage('plan') {
-      when { branch 'master'; branch 'develop' }
+      when { anyOf { branch 'master'; branch 'develop' } }
       steps {
         script {
           if (env.BRANCH_NAME == 'master') {
@@ -32,7 +32,7 @@ pipeline {
       }
     }
     stage('apply') {
-      when { branch 'master'; branch 'develop' }
+      when { anyOf { branch 'master'; branch 'develop' } }
       input {
         message 'Should we apply this plan to the infrastructure?'
         ok 'Yes, I have reviewed the plan.'
