@@ -13,7 +13,7 @@ data "aws_ami" "jenkins" {
 
   filter {
     name   = "tag:env"
-    values = ["$var.env"]
+    values = ["${var.env}"]
   }
 
   owners = ["self"]
