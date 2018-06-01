@@ -18,7 +18,7 @@ pipeline {
         sh 'make BRANCH_NAME=$BRANCH_NAME build'
       }
     }
-    stage('plan') {
+    stage('deploy') {
       when { anyOf { branch 'master'; branch 'develop' } }
       steps {
         script {
@@ -29,16 +29,7 @@ pipeline {
           }
         }
         sh 'make BRANCH_NAME=$BRANCH_NAME plan'
-      }
-    }
-    stage('apply') {
-      when { anyOf { branch 'master'; branch 'develop' } }
-      input {
-        message 'Should we apply this plan to the infrastructure?'
-        ok 'Yes, I have reviewed the plan.'
-        submitter 'adborden'
-      }
-      steps {
+        input(message: 'Should we apply this plan to the infrastructure?', ok: 'Yes, I have reviewed the plan.')
         echo 'psych!'
       }
     }
