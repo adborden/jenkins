@@ -15,6 +15,10 @@ resource "aws_route53_record" "www" {
 resource "aws_acm_certificate" "jenkins" {
   domain_name = "${var.domain_prefix}.aws.adborden.net"
   validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_route53_record" "cert_validation" {
