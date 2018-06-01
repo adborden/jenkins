@@ -34,7 +34,7 @@ pipeline {
         }
         lock('jenkins') {
           milestone(2)
-          echo 'psych!'
+          sh 'make apply'
         }
       }
     }
