@@ -1,9 +1,6 @@
 ---
-aws_efs_dns_name: unknown.internal # Replace this
-jenkins_home_dir: /mnt/jenkins
-
 # We try to maintain the same uid/gid so the data on the external volume
 # retains the correct permissions. Otherwise, the uid/gid of the previous image
 # would be set on the data, and not match the new uid/gid.
-jenkins_uid: 999
-jenkins_gid: 999
+jenkins_uid: 899
+jenkins_gid: 899

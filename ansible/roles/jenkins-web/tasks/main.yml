@@ -1,0 +1,47 @@
+---
+# Include nfs utils for EFS
+- include: nfs.yml
+
+# We set the directory as read-only. When mounted it will be r/w. This
+# prevents us from writing state to a directory that is going to get lost.
+- name: create jenkins home
+  file: dest="{{ jenkins_home_dir }}" mode=0550 owner=jenkins group=jenkins state=directory
+
+- name: add jenkins repo key
+  apt_key:
+    url: "https://pkg.jenkins.io/debian/jenkins.io.key"
+    state: present
+
+- name: add jenkins repo
+  apt_repository:
+    repo: deb http://pkg.jenkins.io/debian-stable binary/
+    state: present
+
+- name: install jenkins
+  apt: name=jenkins state=present
+
+- name: set JENKINS_HOME
+  lineinfile:
+    path: /etc/default/jenkins
+    regexp: "^JENKINS_HOME="
+    line: JENKINS_HOME={{ jenkins_home_dir }}
+
+- name: set UMASK for JENKINS_HOME
+  lineinfile:
+    path: /etc/default/jenkins
+    regexp: "^# UMASK"
+    line: UMASK=027
+
+- name: enable jenkins
+  systemd: name=jenkins enabled=yes state=started
+
+- name: create jenkins ssh directory
+  file: dest=/home/jenkins/.ssh owner=jenkins group=jenkins mode=0750 state=directory
+
+- name: copy jenkins ssh key
+  copy:
+    src: "{{ jenkins_ssh_key_file }}"
+    dest: /home/jenkins/.ssh/id_rsa
+    owner: jenkins
+    group: jenkins
+    mode: 0600
