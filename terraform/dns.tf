@@ -4,14 +4,16 @@ data "aws_route53_zone" "aws" {
 
 resource "aws_route53_record" "www" {
   zone_id = "${data.aws_route53_zone.aws.zone_id}"
-  name    = "jenkins"
+  name    = "${var.domain_prefix}"
   type    = "CNAME"
   ttl     = "300"
   records = ["${aws_lb.jenkins.dns_name}"]
+
+  depends_on = ["aws_acm_certificate_validation.jenkins"]
 }
 
 resource "aws_acm_certificate" "jenkins" {
-  domain_name = "jenkins.aws.adborden.net"
+  domain_name = "${var.domain_prefix}.aws.adborden.net"
   validation_method = "DNS"
 }
 
