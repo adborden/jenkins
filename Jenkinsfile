@@ -33,7 +33,9 @@ pipeline {
           input(message: 'Should we apply this plan to the infrastructure?', ok: 'Yes, I have reviewed the plan.')
         }
         milestone()
-        echo 'psych!'
+        lock('jenkins') {
+          echo 'psych!'
+        }
       }
     }
   }
