@@ -1,5 +1,4 @@
 pipeline {
-  options { disableConcurrentBuilds() }
   agent { dockerfile true }
   environment {
     AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
@@ -15,6 +14,7 @@ pipeline {
     stage('build') {
       when { anyOf { branch 'master'; branch 'develop' } }
       steps {
+        milestone(1)
         sh 'make BRANCH_NAME=$BRANCH_NAME build'
       }
     }
@@ -32,8 +32,8 @@ pipeline {
         timeout(time: 30, unit: 'MINUTES') {
           input(message: 'Should we apply this plan to the infrastructure?', ok: 'Yes, I have reviewed the plan.')
         }
-        milestone()
         lock('jenkins') {
+          milestone(2)
           echo 'psych!'
         }
       }
