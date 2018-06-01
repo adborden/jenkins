@@ -29,7 +29,10 @@ pipeline {
           }
         }
         sh 'make BRANCH_NAME=$BRANCH_NAME plan'
-        input(message: 'Should we apply this plan to the infrastructure?', ok: 'Yes, I have reviewed the plan.')
+        timeout(time: 30, unit: 'MINUTES') {
+          input(message: 'Should we apply this plan to the infrastructure?', ok: 'Yes, I have reviewed the plan.')
+        }
+        milestone()
         echo 'psych!'
       }
     }
