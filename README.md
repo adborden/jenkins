@@ -65,7 +65,7 @@ You can create the EFS first.
 
     jenkins_efs_dns_name = fs-0817f111.efs.us-west-1.amazonaws.com
 
-Then update the variable in `ansible/group_vars/jenkins/vars.yml` and build
+Then update the variable in `ansible/roles/jenkins-web/vars/<env>.yml` and build
 a new AMI.
 
     $ make build
