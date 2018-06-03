@@ -6,8 +6,8 @@ resource "aws_vpc" "jenkins" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "jenkins"
-    Env  = "dev"
+    Name = "jenkins-${var.env}"
+    Env  = "${var.env}"
   }
 }
 
@@ -15,7 +15,8 @@ resource "aws_internet_gateway" "jenkins" {
   vpc_id = "${aws_vpc.jenkins.id}"
 
   tags {
-    Name = "jenkins"
+    Name = "jenkins-${var.env}"
+    Env = "${var.env}"
   }
 }
 
@@ -25,6 +26,11 @@ resource "aws_default_route_table" "default" {
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = "${aws_internet_gateway.jenkins.id}"
+  }
+
+  tags {
+    Name = "jenkins"
+    Env = "${var.env}"
   }
 }
 
@@ -36,5 +42,6 @@ resource "aws_subnet" "jenkins" {
 
   tags {
     Name = "jenkins"
+    Env = "${var.env}"
   }
 }

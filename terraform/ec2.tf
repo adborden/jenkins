@@ -11,6 +11,11 @@ data "aws_ami" "jenkins-web" {
     values = ["hvm"]
   }
 
+  filter {
+    name   = "tag:env"
+    values = ["${var.env}"]
+  }
+
   owners = ["self"]
 }
 
@@ -114,7 +119,7 @@ resource "aws_autoscaling_group" "jenkins-web" {
 }
 
 resource "aws_launch_configuration" "jenkins-worker" {
-  name_prefix = "jenkins-worker-"
+  name_prefix = "jenkins-worker-${var.env}-"
   image_id = "${data.aws_ami.jenkins-worker.id}"
   instance_type = "t2.micro"
   security_groups = ["${aws_vpc.jenkins.default_security_group_id}"]
