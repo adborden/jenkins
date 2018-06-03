@@ -1,6 +1,6 @@
 ifeq ($(BRANCH_NAME), master)
   VARIABLES += -var env=production
-  TF_VARFILE = -var-file=production.tfvars
+  TF_VARFILE = -var-file=terraform/production.tfvars
   TF_WORKSPACE=production
 endif
 
