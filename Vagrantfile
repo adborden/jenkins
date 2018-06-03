@@ -83,12 +83,18 @@ Vagrant.configure("2") do |config|
 
     web.vm.provision 'ansible' do |ansible|
       ansible.playbook = 'ansible/jenkins-web.yml'
+      ansible.extra_vars = {
+        env: 'development'
+      }
     end
   end
 
   config.vm.define 'jenkins-worker' do |worker|
     worker.vm.provision 'ansible' do |ansible|
       ansible.playbook = 'ansible/jenkins-worker.yml'
+      ansible.extra_vars = {
+        env: 'development'
+      }
     end
   end
 
