@@ -42,6 +42,11 @@ resource "aws_lb_target_group" "jenkins-http" {
   port     = 80
   protocol = "HTTP"
   vpc_id   = "${aws_vpc.jenkins.id}"
+
+  health_check {
+    path = "/blue/"
+    matcher = "200-399" # allow redirects (for ->https)
+  }
 }
 
 resource "aws_lb_target_group" "jenkins-https" {
@@ -49,6 +54,11 @@ resource "aws_lb_target_group" "jenkins-https" {
   port     = 8080
   protocol = "HTTP"
   vpc_id   = "${aws_vpc.jenkins.id}"
+
+  health_check {
+    path = "/blue/"
+    matcher = "200-299"
+  }
 }
 
 resource "aws_lb_listener" "jenkins-http" {
