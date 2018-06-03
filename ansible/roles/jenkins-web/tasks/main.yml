@@ -1,4 +1,11 @@
 ---
+- name: include variables specific to env
+  include_vars: "{{ env }}.yml"
+
+- name: include variables from CI
+  include_vars: ci.yml
+  when: ci
+
 # Include nfs utils for EFS
 - include: nfs.yml
 

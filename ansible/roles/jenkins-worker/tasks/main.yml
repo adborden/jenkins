@@ -1,5 +1,7 @@
 ---
 - name: copy jenkins public ssh key
   authorized_key:
-    key: "{{ lookup('file', jenkins_ssh_public_key_file) }}"
+    key: "{{ item }}"
     user: jenkins
+  with_file:
+    - "{{ jenkins_ssh_public_key_file }}"

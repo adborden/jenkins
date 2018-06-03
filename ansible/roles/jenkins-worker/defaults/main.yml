@@ -1,2 +1,2 @@
 ---
-jenkins_ssh_public_key_file: "{{ secrets_dir }}/jenkins_ssh.pub"
+jenkins_ssh_public_key_file: "jenkins_ssh.pub"
