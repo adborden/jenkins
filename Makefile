@@ -1,8 +1,7 @@
-VARIABLES =
-
 ifeq ($(BRANCH_NAME), master)
   VARIABLES += -var env=production
   TF_VARFILE = -var-file=production.tfvars
+  TF_WORKSPACE=production
 endif
 
 check:
@@ -19,10 +18,10 @@ test:
 	vagrant provision
 
 plan:
-	terraform plan $(TF_VARFILE) $(VARIABLES) -out=plan.tfplan terraform
+	TF_WORKSPACE=$(TF_WORKSPACE) terraform plan $(TF_VARFILE) $(VARIABLES) -out=plan.tfplan terraform
 
 apply: plan.tfplan
-	terraform apply plan.tfplan
+	TF_WORKSPACE=$(TF_WORKSPACE) terraform apply plan.tfplan
 	rm plan.tfplan
 
 build:
