@@ -55,12 +55,16 @@ resource "aws_security_group" "jenkins" {
 }
 
 resource "aws_placement_group" "spread" {
-  name     = "jenkins-spread"
+  name     = "jenkins-${var.env}-spread"
   strategy = "spread"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_launch_configuration" "jenkins-web" {
-  name_prefix = "jenkins-web-"
+  name_prefix = "jenkins-web-${var.env}-"
   image_id = "${data.aws_ami.jenkins-web.id}"
   instance_type = "t2.micro"
   security_groups = ["${aws_vpc.jenkins.default_security_group_id}", "${aws_security_group.jenkins.id}"]
@@ -72,7 +76,7 @@ resource "aws_launch_configuration" "jenkins-web" {
 }
 
 resource "aws_autoscaling_group" "jenkins-web" {
-  name                      = "jenkins-web"
+  name                      = "jenkins-web-${var.env}"
   max_size                  = "${var.web_instances_max}"
   min_size                  = "${var.web_instances_min}"
   health_check_grace_period = 300
@@ -91,6 +95,12 @@ resource "aws_autoscaling_group" "jenkins-web" {
   tag {
     key                 = "Name"
     value               = "jenkins-web"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "Env"
+    value               = "${var.env}"
     propagate_at_launch = true
   }
 
@@ -116,7 +126,7 @@ resource "aws_launch_configuration" "jenkins-worker" {
 }
 
 resource "aws_autoscaling_group" "jenkins-worker" {
-  name                      = "jenkins-worker"
+  name                      = "jenkins-worker-${var.env}"
   max_size                  = "${var.worker_instances_max}"
   min_size                  = "${var.worker_instances_min}"
   desired_capacity          = "${var.worker_instances_desired}"
@@ -134,6 +144,12 @@ resource "aws_autoscaling_group" "jenkins-worker" {
   tag {
     key                 = "Name"
     value               = "jenkins-worker"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "Env"
+    value               = "${var.env}"
     propagate_at_launch = true
   }
 

@@ -1,5 +1,5 @@
 resource "aws_security_group" "lb" {
-  name = "jenkins-lb"
+  name = "jenkins-lb-${var.env}"
   vpc_id = "${aws_vpc.jenkins.id}"
 
   ingress {
@@ -25,7 +25,7 @@ resource "aws_security_group" "lb" {
 }
 
 resource "aws_lb" "jenkins" {
-  name               = "jenkins-lb"
+  name               = "jenkins-lb-${var.env}"
   internal           = false
   load_balancer_type = "application"
   security_groups    = ["${aws_vpc.jenkins.default_security_group_id}", "${aws_security_group.lb.id}"]
@@ -38,14 +38,14 @@ resource "aws_lb" "jenkins" {
 }
 
 resource "aws_lb_target_group" "jenkins-http" {
-  name     = "jenkins-http"
+  name     = "jenkins-http-${var.env}"
   port     = 80
   protocol = "HTTP"
   vpc_id   = "${aws_vpc.jenkins.id}"
 }
 
 resource "aws_lb_target_group" "jenkins-https" {
-  name     = "jenkins-https"
+  name     = "jenkins-https-${var.env}"
   port     = 8080
   protocol = "HTTP"
   vpc_id   = "${aws_vpc.jenkins.id}"
