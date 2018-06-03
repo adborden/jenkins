@@ -15,7 +15,7 @@ pipeline {
     stage('build') {
       when { anyOf { branch 'master'; branch 'develop' } }
       environment {
-        JENKINS_SSH_KEY_FILE = credentials('jenkins_ssh')
+        JENKINS_SSH_KEY_FILE = credentials('jenkins-web-ssh-key')
       }
       steps {
         milestone(1)
