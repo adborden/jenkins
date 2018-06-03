@@ -1,0 +1,2 @@
+---
+jenkins_ssh_key_file: "{{ lookup('env', 'JENKINS_SSH_KEY_FILE') }}"

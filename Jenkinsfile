@@ -3,6 +3,7 @@ pipeline {
   environment {
     AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
     AWS_ACCESS_KEY_ID = credentials('aws-access-key-id')
+    CI = 1
   }
   stages {
     stage('lint') {
@@ -13,22 +14,18 @@ pipeline {
     }
     stage('build') {
       when { anyOf { branch 'master'; branch 'develop' } }
+      environment {
+        JENKINS_SSH_KEY_FILE = credentials('jenkins-web-ssh-key')
+      }
       steps {
         milestone(1)
-        sh 'make BRANCH_NAME=$BRANCH_NAME build'
+        sh 'make build'
       }
     }
     stage('deploy') {
       when { anyOf { branch 'master'; branch 'develop' } }
       steps {
-        script {
-          if (env.BRANCH_NAME == 'master') {
-              sh 'terraform workspace select production terraform'
-          } else {
-              sh 'terraform workspace select default terraform'
-          }
-        }
-        sh 'make BRANCH_NAME=$BRANCH_NAME plan'
+        sh 'make plan'
         timeout(time: 30, unit: 'MINUTES') {
           input(message: 'Should we apply this plan to the infrastructure?', ok: 'Yes, I have reviewed the plan.')
         }

@@ -1,0 +1,3 @@
+---
+ci: "{{ lookup('env', 'CI') }}"
+secrets_dir: "{{ lookup('env', 'PWD') }}/secrets"

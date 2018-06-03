@@ -1,0 +1,2 @@
+---
+jenkins_ssh_public_key_file: "jenkins_ssh.pub"

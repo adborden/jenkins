@@ -1,0 +1,3 @@
+---
+jenkins_home_dir: /mnt/jenkins
+jenkins_ssh_key_file: "{{ secrets_dir }}/jenkins_ssh"

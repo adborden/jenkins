@@ -5,6 +5,10 @@ resource "aws_efs_file_system" "jenkins" {
     Name = "jenkins-efs"
     env  = "${var.env}"
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_efs_mount_target" "jenkins" {
