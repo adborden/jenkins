@@ -8,13 +8,14 @@ Jenkins CI server on AWS.
 - Packer
 - Terraform
 - Python 3.6
+- [pipenv](https://docs.pipenv.org/en/latest/)
 
 
 ## Setup
 
 Install python dependencies.
 
-    $ pip install -r requirements.txt
+    $ pipenv install
 
 Initialize Terraform.
 
