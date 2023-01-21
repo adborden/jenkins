@@ -1,6 +1,15 @@
-# Jenkins
+# Jenkins CI/CD
 
-Jenkins CI server on AWS.
+Experimental Jenkins CI server on AWS with continuous self-delivery.
+
+Contains ansible playbooks, packer template, and terraform configuration files
+to deploy a Jenkins cluster in a semi- high availability mode. HA is the goal,
+but Jenkins is not really designed for true HA.
+
+The production environment (jenkins.aws.adborden.net) is configured to watch
+this repository. All changes are linted. Changes to the `develop` branch are
+deployed to a development environment (jenkins-dev.aws.adborden.net). Changes to
+`master` are deployed to the production environment (production deploys itself).
 
 
 ## Prerequisites
@@ -27,8 +36,8 @@ Run the build.
 
 Deploy the infrastructure.
 
-    $ terraform plan terraform
-    $ terraform apply terraform
+    $ make plan
+    $ make apply
 
 
 ## Tests
@@ -71,6 +80,9 @@ a new AMI.
 
     $ make build
 
+_At this point, you probably want to spin up a one-off instance with the new AMI
+to initialize the Jenkins state._
+
 Now we can build the whole thing.
 
     $ terraform plan terraform
@@ -78,6 +90,12 @@ Now we can build the whole thing.
 
 
 ## Initial Jenkins state creation
+
+Initially, the EFS is created with root permissions 750, so the jenkins-web
+instances cannot write to it. You'll need to ssh into the instance manually, set
+the permissions, then enter the security token into the web UI. Alternatively,
+you can copy an existing Jenkins state and update the permissions to
+`jenkins:jenkins`.
 
 When you initialize Jenkins for the first time there are a few steps. First, you
 need to provide a token to the UI. The token is available in the jenkins logs at
@@ -110,3 +128,26 @@ Out of the box, Jenkins fails the ELB health check. The ELB expects a `200` from
 is a better health check endpoint for Jenkins. I just configured read-only
 access for anonymous users, since the intention is for jobs to be public by
 default.
+
+
+### Rotating new AMIs
+
+Autoscaling groups won't automatically rotate instances needing new AMIs.
+Instead this can be done by forcing re-creation of the ASG. Probably adding an
+AMI version variable and making that part of the ASG name would work best (the
+change in name would trigger re-creation).
+
+
+## Todo
+
+- [ ] Avoid ASG for workers, using DNS would mean the configuration in jenkins
+  does not need to change.
+- [ ] Add backup/restore strategy.
+- [ ] Keep secrets (SSH key) out of AMI.
+- [ ] Are there better tests we can automate on CI? Maybe with vagrant?
+- [ ] Only build AMIs when dependencies change.
+- [ ] Figure out the right directory structure for terraform files. Is `cd` necessary?
+- [ ] Move terraform files into module.
+- [ ] Maybe don't use autoscaling groups. You get better control to roll new
+  instances with terraform + `create_before_destroy` as well as configuring IPs
+  of workers. The goal is not really dynamic scaling.
